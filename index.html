@@ -99,4 +99,78 @@
 
     <!-- Footer -->
     <footer class="text-center py-4 text-xs text-slate-500">
-        Virtual Lab Interaktif IPA SD — Dikembangkan oleh
+        Virtual Lab Interaktif IPA SD — Dikembangkan oleh Kiaa Pendidikan Guru Sekolah Dasar.
+    </footer>
+
+    <!-- JavaScript Interaktif -->
+    <script>
+        function switchTab(tab) {
+            document.getElementById('tab-filtrasi').classList.add('hidden');
+            document.getElementById('tab-magnet').classList.add('hidden');
+            document.getElementById('btn-filtrasi').className = "px-4 py-2 bg-blue-500 rounded-lg font-semibold text-sm transition";
+            document.getElementById('btn-magnet').className = "px-4 py-2 bg-blue-500 rounded-lg font-semibold text-sm transition";
+
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).className = "px-4 py-2 bg-blue-700 rounded-lg font-semibold text-sm transition";
+        }
+
+        // --- Logika Lab Filtrasi ---
+        let filterLayers = [];
+
+        function addLayer(name, colorClass) {
+            if (filterLayers.length >= 4) {
+                alert("Botol sudah penuh dengan 4 lapisan bahan!");
+                return;
+            }
+            filterLayers.push({ name, colorClass });
+            renderBottle();
+        }
+
+        function resetFilter() {
+            filterLayers = [];
+            renderBottle();
+            document.getElementById('filter-result').innerText = "";
+        }
+
+        function renderBottle() {
+            const bottle = document.getElementById('filter-bottle');
+            if (filterLayers.length === 0) {
+                bottle.innerHTML = '<div class="text-center text-xs text-slate-400 italic py-16" id="empty-msg">Botol masih kosong</div>';
+                return;
+            }
+            bottle.innerHTML = '';
+            filterLayers.forEach((layer, index) => {
+                const div = document.createElement('div');
+                div.className = `w-full h-12 ${layer.colorClass} flex items-center justify-center font-bold text-xs rounded-md shadow-sm`;
+                div.innerText = `${index + 1}. ${layer.name}`;
+                bottle.appendChild(div);
+            });
+        }
+
+        function runFilter() {
+            if (filterLayers.length < 4) {
+                alert("Harap isi botol dengan lengkap (4 lapisan) sebelum menuangkan air!");
+                return;
+            }
+            const res = document.getElementById('filter-result');
+            if (filterLayers[0].name === 'Kapas' && filterLayers[3].name === 'Kerikil') {
+                res.innerHTML = '✨ Berhasil! Air mengalir tersaring sempurna dan menjadi "Sangat Jernih"!';
+                res.className = "mt-4 text-center font-bold text-sm text-emerald-600";
+            } else {
+                res.innerHTML = '⚠️ Air berhasil disaring, namun hasilnya masih "Agak Keruh" karena susunan kurang ideal.';
+                res.className = "mt-4 text-center font-bold text-sm text-amber-600";
+            }
+        }
+
+        // --- Logika Lab Magnet ---
+        function testMagnet(objectName, isMagnetic) {
+            const res = document.getElementById('magnet-result');
+            if (isMagnetic) {
+                res.innerHTML = `🧲 **${objectName}** berhasil **TERTARIK & MENEMPEL** pada magnet! <br><span class="text-xs text-emerald-600 font-normal">Kesimpulan: Benda ini berjenis **MAGNETIS** (terbuat dari logam/besi).</span>`;
+            } else {
+                res.innerHTML = `❌ **${objectName}** **TIDAK TERTARIK** dan diam saja saat didekatkan magnet. <br><span class="text-xs text-rose-600 font-normal">Kesimpulan: Benda ini berjenis **NON-MAGNETIS** (bukan logam).</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
